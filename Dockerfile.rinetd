@@ -1,22 +1,30 @@
 FROM alpine:3.17.0 AS builder
 
 ADD https://github.com/samhocevar/rinetd/releases/download/v0.73/rinetd-0.73.tar.gz /tmp/rinetd-0.73.tar.gz
+ADD https://pkgs.tailscale.com/stable/tailscale_1.34.1_amd64.tgz /tmp/tailscale.tgz
+
+RUN set -xe \
+	&& tar -xzf /tmp/rinetd-0.73.tar.gz -C /tmp \
+	&& tar -xzf /tmp/tailscale.tgz -C /tmp
 
 RUN set -xe \
 	&& apk add --no-cache \
 		build-base \
 		autoconf \
 		automake \
-	&& tar -xzf /tmp/rinetd-0.73.tar.gz -C /tmp \
 	&& cd /tmp/rinetd-0.73 \
 	&& ./bootstrap \
 	&& ./configure --prefix=/usr \
 	&& make -j $(nproc)
 
-FROM ghcr.io/tailscale/tailscale@sha256:b1bc35220b2521c25d140dc262e7e2c7cb1ca2a38ea13e48ee80f4019b52aec7
+FROM alpine:3.17.0
 
 COPY --from=builder /tmp/rinetd-0.73/rinetd /usr/sbin/rinetd
+COPY --from=builder /tmp/tailscale_1.34.1_amd64/tailscale /usr/sbin/tailscale
+COPY --from=builder /tmp/tailscale_1.34.1_amd64/tailscaled /usr/sbin/tailscaled
 COPY ./run.sh /tailscale/run.sh
 
 EXPOSE 80/tcp
 EXPOSE 443/tcp
+
+CMD [ "/tailscale/run.sh" ]

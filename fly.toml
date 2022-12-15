@@ -3,7 +3,7 @@
 app = "tailscale-ingress"
 
 [env]
-  TS_USERSPACE = "true"
+  TS_USERSPACE = "false"
 
 [[services]]
   internal_port = 80

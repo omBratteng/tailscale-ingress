@@ -13,7 +13,7 @@ RUN set -xe \
 	&& ./configure --prefix=/usr \
 	&& make -j $(nproc)
 
-FROM ghcr.io/tailscale/tailscale@sha256:bc76dd81a3c478a3913d060d73446d6c22e9b825c24ba67831430a424dfb1c8e
+FROM ghcr.io/tailscale/tailscale@sha256:b1bc35220b2521c25d140dc262e7e2c7cb1ca2a38ea13e48ee80f4019b52aec7
 
 COPY --from=builder /tmp/rinetd-0.73/rinetd /usr/sbin/rinetd
 COPY ./run.sh /tailscale/run.sh

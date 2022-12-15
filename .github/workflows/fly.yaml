@@ -18,4 +18,4 @@ jobs:
         - uses: superfly/flyctl-actions/setup-flyctl@master
 
         - run: |
-            flyctl deploy --remote-only
+            flyctl deploy --remote-only --dockerfile Dockerfile.rinetd

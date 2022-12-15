@@ -16,9 +16,7 @@ RUN set -xe \
 FROM ghcr.io/tailscale/tailscale@sha256:bc76dd81a3c478a3913d060d73446d6c22e9b825c24ba67831430a424dfb1c8e
 
 COPY --from=builder /tmp/rinetd-0.73/rinetd /usr/sbin/rinetd
-COPY ./run.sh /run.sh
+COPY ./run.sh /tailscale/run.sh
 
 EXPOSE 80/tcp
 EXPOSE 443/tcp
-
-CMD [ "/run.sh" ]

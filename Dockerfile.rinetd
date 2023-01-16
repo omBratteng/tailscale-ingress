@@ -1,4 +1,4 @@
-FROM alpine:3.17.0 AS builder
+FROM alpine:3.17.1 AS builder
 
 ADD https://github.com/samhocevar/rinetd/releases/download/v0.73/rinetd-0.73.tar.gz /tmp/rinetd-0.73.tar.gz
 ADD https://pkgs.tailscale.com/stable/tailscale_1.34.1_amd64.tgz /tmp/tailscale.tgz
@@ -17,7 +17,7 @@ RUN set -xe \
 	&& ./configure --prefix=/usr \
 	&& make -j $(nproc)
 
-FROM alpine:3.17.0
+FROM alpine:3.17.1
 
 COPY --from=builder /tmp/rinetd-0.73/rinetd /usr/sbin/rinetd
 COPY --from=builder /tmp/tailscale_1.34.1_amd64/tailscale /usr/sbin/tailscale

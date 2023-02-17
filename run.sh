@@ -1,8 +1,4 @@
-# Copyright (c) 2022 Tailscale Inc & AUTHORS All rights reserved.
-# Use of this source code is governed by a BSD-style
-# license that can be found in the LICENSE file.
-
-#! /bin/sh
+#!/bin/sh
 
 export PATH=$PATH:/tailscale/bin
 
@@ -48,7 +44,7 @@ PID=$!
 trap handler SIGINT SIGTERM
 
 HOSTNAME="${FLY_APP_NAME}-${FLY_REGION}-$(hostname)"
-UP_ARGS="--accept-dns=${TS_ACCEPT_DNS} --hostname=${HOSTNAME}"
+UP_ARGS="--accept-dns=${TS_ACCEPT_DNS} --hostname=${HOSTNAME} --accept-routes"
 if [[ ! -z "${TS_AUTH_KEY}" ]]; then
   UP_ARGS="--authkey=${TS_AUTH_KEY} ${UP_ARGS}"
 fi
@@ -59,16 +55,12 @@ fi
 echo "Running tailscale up"
 tailscale --socket="${TS_SOCKET}" up ${UP_ARGS}
 
-if [[ ! -z "${TS_DEST_IP}" ]]; then
-  echo "Adding iptables rule for DNAT"
-  iptables -t nat -I PREROUTING -d "$(tailscale --socket=${TS_SOCKET} ip -4)" -j DNAT --to-destination "${TS_DEST_IP}"
-fi
 echo "Waiting for tailscaled to exit"
 
 echo "allow *.*.*.*" > /etc/rinetd.conf
 echo "logfile /dev/stdout" >> /etc/rinetd.conf
-echo "0.0.0.0  80   $(tailscale ip -4 nginx)   80" >> /etc/rinetd.conf
-echo "0.0.0.0  443  $(tailscale ip -4 nginx)   443" >> /etc/rinetd.conf
+echo "0.0.0.0  80   ${REDIRECT_TARGET}   80" >> /etc/rinetd.conf
+echo "0.0.0.0  443  ${REDIRECT_TARGET}   443" >> /etc/rinetd.conf
 
 rinetd -f -c /etc/rinetd.conf &
 wait ${PID}

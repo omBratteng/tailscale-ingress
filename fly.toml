@@ -4,6 +4,7 @@ app = "tailscale-ingress"
 
 [env]
   TS_USERSPACE = "false"
+  REDIRECT_TARGET = "10.0.5.100"
 
 [[services]]
   internal_port = 80

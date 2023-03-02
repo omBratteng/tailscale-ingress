@@ -17,3 +17,9 @@ app = "tailscale-ingress"
   protocol = "tcp"
   [[services.ports]]
     port = 443
+
+[[services]]
+  internal_port = 3000
+  protocol = "tcp"
+  [[services.ports]]
+    port = 3000

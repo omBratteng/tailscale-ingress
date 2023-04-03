@@ -1,4 +1,4 @@
-FROM alpine:3.17.2 AS builder
+FROM alpine:3.17.3 AS builder
 
 ADD https://github.com/samhocevar/rinetd/releases/download/v0.73/rinetd-0.73.tar.gz /tmp/rinetd-0.73.tar.gz
 

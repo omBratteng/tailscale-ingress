@@ -1,6 +1,7 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 
 app = "tailscale-ingress"
+primary_region = "arn"
 
 [env]
   TS_USERSPACE = "false"

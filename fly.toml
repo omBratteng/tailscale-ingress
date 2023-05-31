@@ -2,6 +2,8 @@
 
 app = "tailscale-ingress"
 primary_region = "arn"
+kill_signal = "SIGINT"
+kill_timeout = "5s"
 
 [env]
   TS_USERSPACE = "false"
@@ -12,9 +14,17 @@ primary_region = "arn"
   protocol = "tcp"
   [[services.ports]]
     port = 80
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
 
 [[services]]
   internal_port = 443
   protocol = "tcp"
   [[services.ports]]
     port = 443
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20

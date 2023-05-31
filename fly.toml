@@ -1,4 +1,4 @@
-# fly.toml file generated for tailscale-ingress on 2022-12-01T04:37:48+01:00
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 
 app = "tailscale-ingress"
 
@@ -17,9 +17,3 @@ app = "tailscale-ingress"
   protocol = "tcp"
   [[services.ports]]
     port = 443
-
-[[services]]
-  internal_port = 3000
-  protocol = "tcp"
-  [[services.ports]]
-    port = 3000

@@ -1,4 +1,4 @@
-FROM ghcr.io/tailscale/tailscale:v1.68.1 AS builder
+FROM ghcr.io/tailscale/tailscale:v1.70.0 AS builder
 
 ADD https://github.com/samhocevar/rinetd/releases/download/v0.73/rinetd-0.73.tar.gz /tmp/rinetd-0.73.tar.gz
 
@@ -13,7 +13,7 @@ RUN set -xe \
 	&& ./configure --prefix=/usr \
 	&& make -j $(nproc)
 
-FROM ghcr.io/tailscale/tailscale:v1.68.1
+FROM ghcr.io/tailscale/tailscale:v1.70.0
 
 COPY --from=builder /tmp/rinetd-0.73/rinetd /usr/sbin/rinetd
 COPY ./run.sh /tailscale/run.sh
